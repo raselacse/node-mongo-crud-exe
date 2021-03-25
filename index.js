@@ -11,6 +11,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 const cors = require('cors')
 app.use(cors())
 
+const ObjectId = require('mongodb').ObjectId;
+
 const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://organicUser:oGwFfVUWCZBrI5zK@cluster0.muahx.mongodb.net/organicdb?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -35,6 +37,12 @@ client.connect(err => {
         .toArray((err, documents)=>{
             res.send(documents)
         })
+    })
+    app.delete("/delete/:id", (req, res)=>{
+        productCollection.deleteOne({_id: ObjectId(req.params.id)})
+          .then(result => {
+            console.log(result);
+          })
     })
     //   client.close();
 })
